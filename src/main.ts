@@ -9,7 +9,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  //Static Serve
   app.setBaseViewsDir(join(__dirname, '..', 'public'));
   const port = process.env.PORT || 3000;
   await app.listen(port);
