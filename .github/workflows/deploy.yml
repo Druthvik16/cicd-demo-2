@@ -1,0 +1,36 @@
+name: CI/CD Two Branch Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - frontend
+      - backend
+
+jobs:
+  detect-branch:
+    name: Detect Branch
+    runs-on: ubuntu-latest
+    outputs:
+      is_frontend: ${{ steps.check.outputs.is_frontend }}
+      is_backend: ${{ steps.check.outputs.is_backend }}
+      is_main: ${{ steps.check.outputs.is_main }}
+    steps:
+      - name: Check which branch
+        id: check
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          echo "Branch pushed: $BRANCH"
+          if [ "$BRANCH" = "frontend" ]; then
+            echo "is_frontend=true" >> $GITHUB_OUTPUT
+            echo "is_backend=false" >> $GITHUB_OUTPUT
+            echo "is_main=false" >> $GITHUB_OUTPUT
+          elif [ "$BRANCH" = "backend" ]; then
+            echo "is_frontend=false" >> $GITHUB_OUTPUT
+            echo "is_backend=true" >> $GITHUB_OUTPUT
+            echo "is_main=false" >> $GITHUB_OUTPUT
+          else
+            echo "is_frontend=true" >> $GITHUB_OUTPUT
+            echo "is_backend=true" >> $GITHUB_OUTPUT
+            echo "is_main=true" >> $GITHUB_OUTPUT
+          fi
